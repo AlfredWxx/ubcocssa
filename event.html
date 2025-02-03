@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSSA event page</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: white; /* 网页整体背景白色 */
+        }
+        /* 导航栏 */
+        .navbar {
+            position: fixed; /* 固定在顶部 */
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 9%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background-color: white;
+            color: black;
+            z-index: 1000; /* 确保导航栏在最上层 */
+            transition: top 0.3s;  /* 平滑的显示/隐藏动画 */
+        }
+
+        .navbar.hidden {
+            top: -150px;  /* 把导航栏移出视口，假设导航栏高度为60px */
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .logo img {
+            width: 80px;
+            height: 80px;
+            margin-right: 10px;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: black;
+            text-decoration: none;
+            margin-left: 20px;
+            font-size: 16px;
+            transition: 0.3s;
+        }
+
+        .nav-links a:hover {
+            text-decoration: underline;
+        }
+
+        .topic {
+            padding: 10px;
+            text-align: center;
+        }
+
+                /* 轮播容器 */
+        .slider-container {
+            position: relative;
+            width: 100%; /* 70% 视口宽度 */
+            height: 100%; /* 70% 视口高度 */
+            overflow: hidden;
+            background-color: white;
+            margin:auto;
+            /* display: flex;
+            align-items: center;
+            justify-content: center; */
+        }
+        /* 活动列表 */
+        .slider {
+            display: flex;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.5s ease-in-out;
+        }
+
+        .slide {
+            min-width: 100%;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .slide img {
+            width: 100%;
+            height: 600px;
+            object-fit: cover;
+        }
+
+        .dots-container {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            background-color: #ccc;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .dot.active {
+            background-color: #333;
+        }
+
+        .activity_container {
+            width: 60%;
+            display: flex;
+            align-items: center;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            margin: 50px auto;
+            cursor: pointer;
+            height: 400px;
+        }
+
+        .activity_container img {
+            width: 40%;
+            border-radius: 10px;
+            margin-right: 20px;
+            object-fit: contain;  /* 保持完整显示，但可能有空白 */
+            background-color: #f4f4f4; /* 给空白区域填充背景色 */
+        }
+
+        .activity_content {
+            flex: 1;
+        }
+
+        .activity-container {
+            width: 60%;
+            display: flex;
+            align-items: center;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            margin: 50px auto;
+            cursor: pointer;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+            height: 400px;
+        }
+
+        .activity-container img {
+            width: 40%;
+            border-radius: 10px;
+            margin-right: 20px;
+            object-fit: contain;  /* 保持完整显示，但可能有空白 */
+            background-color: #f4f4f4; /* 给空白区域填充背景色 */
+        }
+
+        .activity-content {
+            flex: 1;
+        }
+
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 50%;
+            display: none;
+            cursor: pointer;
+            font-size: 18px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+            transition: opacity 0.3s;
+        }
+
+        footer {
+            background: #f4f4f4;
+            padding: 5px;
+        }
+
+        .follow-us {
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        .follow-us h2 {
+            font-size: 60px;
+        }
+
+        .follow-us img {
+            width: 150px;
+            height: 150px;
+            margin: 15px;
+        }
+        .follow-us .social-icons a {
+            color: #333;
+            font-size: 60px;
+            margin: 0 10px;
+            text-decoration: none;
+        }
+        .follow-us .social-icons a:hover {
+            color: #0077b5;
+        }
+        .follow-us p {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 导航栏 -->
+    <div class="navbar">
+        <div class="logo" onclick="window.location.href='index.html'">
+            <img src="logo.jpeg" alt="Logo">
+            <span href="index.html">UBCO CSSA</span>
+        </div>
+        <div class="nav-links">
+            <a href="index.html">主页</a>
+            <a href="contact.html">联系我们</a>
+            <a href="people.html">关于我们</a>
+            <a href="event.html">活动</a>
+        </div>
+    </div>
+
+    <!-- 顶部滑动图 -->
+    <div class="slider-container">
+        <div class="slider" id="slider">
+            <div class="slide"><img src="UBCO.jpg" alt="活动 1"></div>
+            <div class="slide"><img src="UBCO.jpg" alt="活动 2"></div>
+            <div class="slide"><img src="UBCO.jpg" alt="活动 3"></div>
+            <div class="slide"><img src="UBCO.jpg" alt="活动 4"></div>
+        </div>
+        <div class="dots-container">
+            <span class="dot active" onclick="goToSlide(0)"></span>
+            <span class="dot" onclick="goToSlide(1)"></span>
+            <span class="dot" onclick="goToSlide(2)"></span>
+            <span class="dot" onclick="goToSlide(3)"></span>
+        </div>
+    </div>
+
+    <!-- 活动框-->
+    <div class="topic"><h2>活动列表</h2></div>
+    <div class="activity_container" onclick="location.href='https://mp.weixin.qq.com/s/2nBS-ur5OcOSmqABV-1h8A'">
+        <img src="activity_photo/festival.jpg" alt="活动宣传图">
+        <div class="activity_content">
+            <h1>2025年春晚</h1>
+            <h2>金蛇起舞贺新春，UBCO CSSA带你共度团圆夜！</h2>
+        </div>
+    </div>
+
+    <div class="activity_container" onclick="location.href='https://mp.weixin.qq.com/s/l1xEXxJrZZjbZHWDayS_DQ'">
+        <img src="activity_photo/orientation.jpg" alt="活动宣传图">
+        <div class="activity_content">
+            <h1>2024新生欢迎会</h1>
+            <h2>UBC Okanagan中国学生会（CSSA）将举办 一场别开生面的迎新活动！</h2>
+        </div>
+    </div>
+
+    <!-- 可活动活动框-->
+    <div class="activity-container" onclick="location.href='https://mp.weixin.qq.com/s/2nBS-ur5OcOSmqABV-1h8A'">
+        <img src="activity_photo/festival.jpg" alt="活动宣传图">
+        <div class="activity-content">
+            <h1>2025年春晚</h1>
+            <h2>金蛇起舞贺新春，UBCO CSSA带你共度团圆夜！</h2>
+        </div>
+    </div>
+
+    <div class="activity-container" onclick="location.href='https://mp.weixin.qq.com/s/l1xEXxJrZZjbZHWDayS_DQ'">
+        <img src="activity_photo/orientation.jpg" alt="活动宣传图">
+        <div class="activity-content">
+            <h1>2024新生欢迎会</h1>
+            <h2>UBC Okanagan中国学生会（CSSA）将举办 一场别开生面的迎新活动！</h2>
+        </div>
+    </div>
+
+    <div class="activity-container" onclick="location.href='https://mp.weixin.qq.com/s/2nBS-ur5OcOSmqABV-1h8A'">
+        <img src="activity_photo/festival.jpg" alt="活动宣传图">
+        <div class="activity-content">
+            <h1>xxx</h1>
+            <h2>xxx</h2>
+        </div>
+    </div>
+
+
+
+    <button class="back-to-top" onclick="scrollToTop()">⬆</button>
+    <!-- follow-us和免责 -->
+    <footer>
+        <div class="follow-us">
+            <h2>Follow Us</h2>
+            <img src="公众号二维码.jpg" alt="QR Code">
+            <div class="social-icons">
+                <a href="#"><i class="fab fa-weibo"></i></a>
+                <a href="#"><i class="fab fa-tiktok"></i></a>
+                <a href="#"><i class="fab fa-facebook"></i></a>
+                <a href="#"><i class="fab fa-youtube"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+            </div>
+            <p>&copy; 2018 - 2025 SUOCSSA ALL RIGHTS RESERVED 英属哥伦比亚大学奥肯那根校区中国学生学者联合会 版权所有</p>
+        </div>
+    </footer>
+
+    <script>
+        // 下滑隐藏导航
+        let lastScrollTop = 0;  // 上一次的滚动位置
+        const navbar = document.querySelector('.navbar');  // 获取导航栏
+
+        window.addEventListener('scroll', function () {
+            let currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+
+            // 如果当前滚动位置大于上次滚动位置（向下滚动）
+            if (currentScroll > lastScrollTop) {
+                navbar.classList.add('hidden');  // 隐藏导航栏
+            } else {
+                navbar.classList.remove('hidden');  // 向上滚动，显示导航栏
+            }
+
+            // 更新最后的滚动位置
+            lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;  // 防止滚动位置小于 0
+        });
+
+        document.addEventListener("scroll", function () {
+            let activities = document.querySelectorAll(".activity-container");
+            let scrollPosition = window.innerHeight + window.scrollY;
+            
+            activities.forEach(activity => {
+                if (activity.offsetTop < scrollPosition) {
+                    activity.style.opacity = "1";
+                    activity.style.transform = "translateY(0)";
+                }
+            });
+
+            let backToTopButton = document.querySelector(".back-to-top");
+            if (window.scrollY > 500) {
+                backToTopButton.style.display = "block";
+            } else {
+                backToTopButton.style.display = "none";
+            }
+        });
+
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        }
+
+
+        let currentIndex = 0;
+        const slider = document.getElementById("slider");
+        const dots = document.querySelectorAll(".dot");
+        let autoSlideInterval;
+
+        function goToSlide(index) {
+            currentIndex = index;
+            slider.style.transform = `translateX(-${index * 100}%)`;
+            updateDots();
+            resetAutoSlide(); // Reset timer when user manually clicks
+        }
+
+        function updateDots() {
+            dots.forEach((dot, idx) => {
+                dot.classList.toggle("active", idx === currentIndex);
+            });
+        }
+
+        function nextSlide() {
+            currentIndex = (currentIndex + 1) % dots.length; // Loop back to first image after last
+            goToSlide(currentIndex);
+        }
+
+        function startAutoSlide() {
+            autoSlideInterval = setInterval(nextSlide, 5000); // Change image every 5 seconds
+        }
+
+        function resetAutoSlide() {
+            clearInterval(autoSlideInterval);
+            startAutoSlide();
+        }
+
+        startAutoSlide(); // Start auto sliding on page load
+
+    </script>
+</body>
+</html>

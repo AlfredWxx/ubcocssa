@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSSA Contact Page</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: white; /* 网页整体背景白色 */
+        }
+
+        /* 导航栏 */
+        .navbar {
+            position: fixed; /* 固定在顶部 */
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 70px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background-color: white;
+            color: black;
+            z-index: 1000; /* 确保导航栏在最上层 */
+            transition: top 0.3s, box-shadow 0.3s;  /* 平滑的显示/隐藏动画 */
+            box-shadow: 2px 2px 4px rgba(90, 85, 85, 0.25); /* 初始状态无阴影 */
+        }
+
+        .navbar.hidden {
+            top: -150px;  /* 把导航栏移出视口，假设导航栏高度为60px */
+            box-shadow: 2px 2px 4px rgba(90, 85, 85, 0.25);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .logo img {
+            width: 70px;
+            height: 70px;
+            margin-right: 10px;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            justify-content: center; /* 菜单从左侧开始对齐 */
+            gap: 30px;
+            flex: 2; /* 右侧菜单占据较少的空间，推向中间偏右 */
+            margin-left: 500px;
+            
+        }
+
+        .nav-links a {
+            color: rgb(147, 137, 137);
+            font-weight: bold;
+            text-decoration: none;
+            font-size: 18px;
+            padding: 5px 10px; /* 增加链接点击区域 */
+            border-radius: 5px; /* 增加圆角 */
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .nav-links a:hover {
+            text-decoration: underline;
+            color: black; /* 鼠标悬停时颜色变化，增加交互感 */
+        }
+
+        
+
+        .hamburger {
+            display: none; /* 默认隐藏 */
+            font-size: 24px;
+            cursor: pointer;
+            color: rgb(12, 20, 51);
+        }
+        
+        .sidebar {
+            position: fixed;
+            margin-top: 70px;
+            top: -100%;
+            left: 0;
+            width: 100%;
+            height: 250px;
+            background-color: rgb(255, 255, 255);
+            color: rgb(255, 255, 255);
+            padding-top: 20px;
+            transition: top 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            z-index: 999;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+        }
+        
+        .sidebar a {
+            color: rgb(21, 21, 21);
+            text-decoration: none;
+            padding: 15px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        /* 小屏幕下样式 */
+        @media screen and (max-width: 1150px) {
+            .nav-links {
+                display: none; /* 隐藏超链接 */
+            }
+        
+            .hamburger {
+                display: block; /* 显示汉堡按钮 */
+            }
+        
+            .sidebar.active {
+                top: 0; /* 激活时显示侧边栏 */
+            }
+        }
+
+        
+        /* h2 单独居中 */
+        .contact-title {
+            text-align: center;
+            margin-top: 130px; /* 距顶部的间距 */
+        }
+
+        .contact-title h2 {
+            font-size: 2.5rem;
+            font-weight: 520;
+            position: relative;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(90, 85, 85, 0.6); /* 添加阴影 */
+        }
+
+        .contact-title h2::after {
+            content: "";
+            display: block;
+            width: 100px;
+            height: 3px;
+            background: #333;
+            margin: 10px auto;
+            box-shadow: 2px 2px 4px rgba(90, 85, 85, 0.6); /* 添加阴影 */
+        }
+
+        /* 图片和表单部分并排居中 */
+        .contact-container {
+            display: flex;
+            justify-content: center; /* 水平方向居中 */
+            align-items: center; /* 垂直方向居中 */
+            gap: 40px; /* 图片与表单之间的间距 */
+            margin: 50px auto; /* 距离顶部与底部的间距 */
+            width: 80%; /* 容器宽度 */
+        }
+
+        /* 图片样式 */
+        .contact-container img {
+            max-width: auto;
+            height: 380px;
+            object-fit: cover;
+            border-radius: 10px; /* 图片圆角 */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* 添加阴影效果 */
+        }
+        .email-display {
+            display: flex;
+            align-items: center;
+            justify-content: center; /* 居中对齐 */
+            margin-bottom: 20px; /* 与表单的间距 */
+            font-size: 1.2rem; /* 字体大小 */
+            color: #333; /* 字体颜色 */
+        }
+        
+        .email-display i {
+            margin-right: 10px; /* 符号与文本的间距 */
+            color: #555; /* 符号颜色 */
+            font-size: 1.5rem; /* 符号大小 */
+        }
+        
+        .email-display span {
+            font-weight: 520; /* 邮箱地址加粗 */
+        }
+        /* 表单样式 */
+        .contact-form {
+            position: relative;
+            max-width: 400px;
+            flex-grow: 1;
+            text-align: center; /* 内容居中 */
+        }
+
+        form {
+            position: relative;
+            display: flex;
+            flex-direction: column; /* 垂直排列 */
+            gap: 20px; /* 表单元素间距 */
+        }
+
+        form input, form textarea {
+            width: 100%; /* 占满表单宽度 */
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        form button {
+            position: absolute; /* 让按钮绝对定位 */
+            bottom: -50px; /* 距离表单底部的外部位置 */
+            right: 0; /* 靠表单的右侧对齐 */
+            background: #333;
+            color: #fff;
+            padding: 10px 20px; /* 调整按钮的内边距，使其更小 */
+            width: 70px; 
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+
+        form button:hover {
+            background: #555;
+            transform: scale(1.05);
+        }
+
+        footer {
+            margin-top: 220px;
+            text-align: center;
+            background: #f4f4f4;
+            padding: 5px;
+        }
+
+        .follow-us {
+            text-align: center;
+            margin-top: 40px;
+            
+        }
+
+        .follow-us h2 {
+            font-size: 60px;
+            font-weight: 520;
+            text-shadow: 2px 2px 4px rgba(90, 85, 85, 0.6); /* 添加阴影 */
+        }
+        
+        .follow-us h2::after {
+            content: "";
+            display: block;
+            width: 100px;
+            height: 3px;
+            background: #333;
+            margin: 10px auto;
+            box-shadow: 2px 2px 4px rgba(90, 85, 85, 0.6); /* 添加阴影 */
+        }
+
+        .follow-us img {
+            width: 150px;
+            height: 150px;
+            margin: 15px;
+        }
+        .follow-us .social-icons a {
+            color: #333;
+            font-size: 60px;
+            margin: 0 10px;
+            text-decoration: none;
+        }
+        .follow-us .social-icons a:hover {
+            color: #0077b5;
+        }
+        .follow-us p {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <div class="navbar">
+        <div class="logo" onclick="window.location.href='index.html'">
+            <img src="logo.jpeg" alt="Logo">
+            <span>UBCO CSSA</span>
+        </div>
+        <div class="nav-links" id="nav-links">
+            <a href="index.html">主页</a>
+            <a href="contact.html">联系我们</a>
+            <a href="people.html">关于我们</a>
+            <a href="people.html">活动</a>
+        </div>
+        <div class="hamburger">
+            ☰
+        </div>
+    </div>
+    <!-- H2 标题部分 -->
+    <div class="contact-title">
+        <h2>联系我们</h2>
+    </div>
+    <div class="sidebar">
+        <a href="index.html">主页</a>
+        <a href="contact.html">联系我们</a>
+        <a href="people.html">关于我们</a>
+        <a href="event.html">活动</a>
+    </div>
+    
+    <div class="contact-container">
+        <img src="contact.png" alt="Contact Image">
+        <div class="contact-form">
+            <div class="email-display">
+                <i class="fas fa-envelope"></i>
+                <span>cssa.storage@gmail.com</span>
+            </div>
+            <form action="mailto:cssa.storage@gmail.com" method="post" enctype="text/plain">
+                <input type="text" name="name" placeholder="姓名 (Name)" required>
+                <input type="email" name="email" placeholder="邮箱 (Email)" required>
+                <input type="tel" name="phone" placeholder="联系电话 (Phone Number)" required>
+                <input type="text" name="subject" placeholder="主题 (Subject)" required>
+                <textarea name="message" placeholder="详细内容 (Message)" rows="5" required></textarea>
+                <button type="submit">Send</button>
+            </form>
+            
+        </div>
+    </div>
+
+    <!-- follow-us和免责 -->
+    <footer>
+        <div class="follow-us">
+            <h2>Follow Us</h2>
+            <img src="公众号二维码.jpg" alt="QR Code">
+            <div class="social-icons">
+                <a href="#"><i class="fab fa-weibo"></i></a>
+                <a href="#"><i class="fab fa-tiktok"></i></a>
+                <a href="#"><i class="fab fa-facebook"></i></a>
+                <a href="#"><i class="fab fa-youtube"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+            </div>
+            <p>&copy; 2018 - 2025 SUOCSSA ALL RIGHTS RESERVED 英属哥伦比亚大学奥肯那根校区中国学生学者联合会 版权所有</p>
+        </div>
+    </footer>
+
+    <script>
+        // 获取汉堡菜单按钮和导航栏
+        const hamburger = document.querySelector('.hamburger');
+        const sidebar = document.querySelector('.sidebar');
+
+        // 点击汉堡按钮展开/收起导航栏
+        hamburger.addEventListener('click', () => {
+            sidebar.classList.toggle('active');
+        });
+        // 下滑隐藏导航
+        let lastScrollTop = 0;  // 上一次的滚动位置
+        const navbar = document.querySelector('.navbar');  // 获取导航栏
+
+        window.addEventListener('scroll', function () {
+            let currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+            // 如果 sidebar 处于打开状态，直接返回，不执行隐藏逻辑
+            if (sidebar.classList.contains('active')) {
+                return;
+            }
+            // 如果当前滚动位置大于上次滚动位置（向下滚动）
+            if (currentScroll > lastScrollTop) {
+                navbar.classList.add('hidden');  // 隐藏导航栏
+            } else {
+                navbar.classList.remove('hidden');  // 向上滚动，显示导航栏
+            }
+
+            // 更新最后的滚动位置
+            lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;  // 防止滚动位置小于 0
+        });
+
+
+
+        function sendEmail() {
+            const name = document.getElementById("name").value.trim();
+            const email = document.getElementById("email").value.trim();
+            const phone = document.getElementById("phone").value.trim();
+            const subject = document.getElementById("subject").value.trim();
+            const message = document.getElementById("message").value.trim();
+
+            const mailtoLink = `mailto:cssa.storage@gmail.com?subject=来自${name}的留言&body=姓名: ${name}%0A邮箱: ${email}%0A%0A${message}`;
+            window.location.href = mailtoLink;
+        }
+    </script>
+
+    
+</body>
+</html>

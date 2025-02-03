@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSSA main page</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: white; /* 网页整体背景白色 */
+            align-items: center;
+        }
+
+        /* 导航栏 */
+        .navbar {
+            position: fixed; /* 固定在顶部 */
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 9%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            /* background-color: rgba(164, 150, 150, 0.8); */
+
+            background-color: rgba(250, 239, 239, 0.8);
+            color: white;
+            z-index: 1000; /* 确保导航栏在最上层 */
+            transition: top 0.3s;  /* 平滑的显示/隐藏动画 */
+        }
+
+        .navbar.hidden {
+            top: -150px;  /* 把导航栏移出视口，假设导航栏高度为60px */
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            color: black;
+        }
+
+        .logo img {
+            width: 80px;
+            height: 80px;
+            margin-right: 10px;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: black;
+            text-decoration: none;
+            margin-left: 20px;
+            font-size: 16px;
+            transition: 0.3s;
+        }
+
+        .nav-links a:hover {
+            text-decoration: underline;
+        }
+        
+        /* 背景图片部分 */
+        .hero-section {
+            width: 100%;
+            height: 60vh; /* 视口高度 60% */
+            background-color: rgba(51, 51, 51, 0.8);
+            background: url('ubco.jpg') center/cover no-repeat;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* 组织介绍部分 */
+        .about-section {
+            width: 80%;
+            margin: 50px auto;
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            
+        }
+
+        .about-logo img {
+            width: 200px;
+            height: 200px;
+            margin-left: 20ch;
+        }
+
+        .about-text {
+            width: 65%;
+            font-size: 18px;
+            line-height: 1.6;
+            color: #333;
+            margin-left: -10px; /* 让标题和内容整体左移 */
+        }
+
+        .about-text h2 {
+            margin-top: 0; /* 确保标题紧贴顶部 */
+        }
+
+        .event-section {
+            width: 80%;
+            margin: 50px auto;
+            text-align: center;
+        }
+
+         /* 标题 */
+         .section-title {
+            font-size: 28px;
+            font-weight: bold;
+            margin: 50px auto;
+            text-align: center;
+        }
+
+        /* 轮播容器 */
+        .carousel-container {
+            position: relative;
+            width: 80%; /* 70% 视口宽度 */
+            height: 70vh; /* 70% 视口高度 */
+            overflow: hidden;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+            background-color: white;
+            margin:auto;
+            /* display: flex;
+            align-items: center;
+            justify-content: center; */
+        }
+
+        /* 活动列表 */
+        .carousel {
+            display: flex;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.5s ease-in-out;
+        }
+
+        .carousel-item {
+            min-width: 100%;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .carousel-item img {
+            width: 90%;
+            height: 500px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        .carousel-item a {
+            margin-top: 10px;
+            font-size: 18px;
+            text-decoration: none;
+            color: #0077b5;
+            font-weight: bold;
+        }
+
+        .carousel-item a:hover {
+            text-decoration: underline;
+        }
+
+        /* 左右切换按钮 */
+        .prev, .next {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+            font-size: 20px;
+            border-radius: 5px;
+        }
+
+        .prev { left: 10px; }
+        .next { right: 10px; }
+
+        .prev:hover, .next:hover {
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+
+        footer {
+            background: #f4f4f4;
+            padding: 5px;
+        }
+
+        .follow-us {
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        .follow-us h2 {
+            font-size: 60px;
+        }
+
+        .follow-us img {
+            width: 150px;
+            height: 150px;
+            margin: 15px;
+        }
+        .follow-us .social-icons a {
+            color: #333;
+            font-size: 60px;
+            margin: 0 10px;
+            text-decoration: none;
+        }
+        .follow-us .social-icons a:hover {
+            color: #0077b5;
+        }
+        .follow-us p {
+            margin-top: 20px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- 导航栏 -->
+    <div class="navbar">
+        <div class="logo" onclick="window.location.href='index.html'">
+            <img src="logo-removebg.png" alt="Logo">
+            <span>UBCO CSSA</span>
+        </div>
+        <div class="nav-links">
+            <a href="index.html">主页</a>
+            <a href="contact.html">联系我们</a>
+            <a href="people.html">关于我们</a>
+            <a href="event.html">活动</a>
+        </div>
+    </div>
+
+    <!-- 背景图片部分 -->
+    <div class="hero-section"></div>
+
+    <!-- 组织介绍部分 -->
+    <div class="about-section">
+        <div class="about-logo">
+            <img src="logo.jpeg" alt="Logo">
+        </div>
+        <div class="about-text">
+            <h2>英属哥伦比亚大学奥肯纳根校区</h2>
+            <h2>中国学生学者联谊会</h2>
+            <h3>UBC OKANAGAN SUO CHINESE STUDENT & SCHOLAR ASSOCIATION</h3>
+            <p>不列颠哥伦比亚大学奥肯纳根中国学生学者联谊会 (UBCO SUO CSSA), 成立于2018年，是不列颠哥伦比亚大学奥肯纳根校区(UBCO)学联会SUO及中国驻温哥华领事馆认证的奥肯纳根地区专属于中国学生学者的非盈利性组织。CSSA秉持着为广大中国学生学者筑就更优质的学习与生活环境，让远方亦如故乡般温暖的理念，为UBCO以及奥肯纳根地区成百上千名中国学生学者提供各类服务。</p>
+            <p>The University of British Columbia Okanagan Chinese Student and Scholar Association (UBCO SUO CSSA) was established in 2018. It is a non-profit organization for Chinese students and scholars in the Okanagan region, certified by the University of British Columbia Okanagan Coordination (UBCO) Student Union SUO and the Chinese Consulate in Vancouver. CSSA adheres to the concept of building a better learning and living environment for Chinese students and scholars, making the distant place as warm as home, and provides public services to hundreds of Chinese students and scholars in UBCO and the Okanagan region.</p>
+        </div>
+    </div>
+
+    <!-- 活动列表部分 -->
+    <!-- <div class="event-section">
+        <h2>活动列表</h2>
+        <div class="carousel">
+            <div class="carousel-inner">
+                <div class="event_1" onclick="window.location.href='people.html'">
+                    <img src="logo.jpeg" alt="活动1">
+                    <span>活动1标题</span>
+                </div>
+                <div class="event_2" onclick="window.location.href='people.html'">
+                    <img src="logo.jpeg" alt="活动2">
+                    <span>活动2标题</span>
+                </div>
+                <div class="event_3" onclick="window.location.href='people.html'">
+                    <img src="logo.jpeg" alt="活动3">
+                    <span>活动3标题</span>
+                </div>
+                <div class="event_4" onclick="window.location.href='people.html'">
+                    <img src="logo.jpeg" alt="活动4">
+                    <span>活动4标题</span>
+                </div>
+            </div> -->
+               <!-- 活动轮播窗口 -->
+
+    <div class="event-section">
+        <h2>活动列表</h2>
+        <div class="carousel-container">
+            <div class="carousel">
+                <div class="carousel-item">
+                    <a href="https://mp.weixin.qq.com/s/2nBS-ur5OcOSmqABV-1h8A">
+                        <img src="activity_photo/festival.jpg" alt="活动 1">
+                        <p>🎉2025年春晚</p>
+                    </a>
+                </div>
+                <div class="carousel-item">
+                    <a href="https://mp.weixin.qq.com/s/l1xEXxJrZZjbZHWDayS_DQ">
+                        <img src="activity_photo/orientation.jpg" alt="活动 2">
+                        <p>2024新生欢迎会</p>
+                    </a>
+                </div>
+                <div class="carousel-item">
+                    <a href="event.html">
+                        <img src="logo.jpeg" alt="活动 3">
+                        <p>🎭 活动 3：戏剧表演</p>
+                    </a>
+                </div>
+            </div>
+                        <!-- 左右切换按钮 -->
+            <button class="prev" onclick="prevSlide()">&#10094;</button>
+            <button class="next" onclick="nextSlide()">&#10095;</button>
+        </div>
+
+    </div>
+    <!-- follow-us和免责 -->
+    <footer>
+        <div class="follow-us">
+            <h2>Follow Us</h2>
+            <img src="公众号二维码.jpg" alt="QR Code">
+            <div class="social-icons">
+                <a href="#"><i class="fab fa-weibo"></i></a>
+                <a href="#"><i class="fab fa-tiktok"></i></a>
+                <a href="#"><i class="fab fa-facebook"></i></a>
+                <a href="#"><i class="fab fa-youtube"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+            </div>
+            <p>&copy; 2018 - 2025 SUOCSSA ALL RIGHTS RESERVED 英属哥伦比亚大学奥肯那根校区中国学生学者联合会 版权所有</p>
+        </div>
+    </footer>
+
+
+    <script>
+        // 下滑隐藏导航
+        let lastScrollTop = 0;  // 上一次的滚动位置
+        const navbar = document.querySelector('.navbar');  // 获取导航栏
+
+        window.addEventListener('scroll', function () {
+            let currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+
+            // 如果当前滚动位置大于上次滚动位置（向下滚动）
+            if (currentScroll > lastScrollTop) {
+                navbar.classList.add('hidden');  // 隐藏导航栏
+            } else {
+                navbar.classList.remove('hidden');  // 向上滚动，显示导航栏
+            }
+
+            // 更新最后的滚动位置
+            lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;  // 防止滚动位置小于 0
+        });
+        // 下滑隐藏导航
+
+
+
+        //活动页面左右键
+        let currentIndex = 0;
+        const slides = document.querySelectorAll(".carousel-item");
+        const totalSlides = slides.length;
+        const carousel = document.querySelector(".carousel");
+        let autoSlideInterval;
+
+        function updateCarousel() {
+            carousel.style.transform = `translateX(-${currentIndex * 100}%)`;
+        }
+
+        function startAutoSlide() {
+            clearInterval(autoSlideInterval); // 先清除之前的计时器
+            autoSlideInterval = setInterval(() => {
+                nextSlide();
+            }, 5000); // 5 秒自动切换
+        }
+
+        function nextSlide() {
+            currentIndex = (currentIndex + 1) % totalSlides;
+            updateCarousel();
+            startAutoSlide(); // 重新计时
+        }
+
+        function prevSlide() {
+            currentIndex = (currentIndex - 1 + totalSlides) % totalSlides;
+            updateCarousel();
+            startAutoSlide(); // 重新计时
+        }
+
+        // 页面加载时开始自动播放
+        startAutoSlide();
+
+    </script>
+
+</body>
+</html>
